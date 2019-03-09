@@ -28,7 +28,7 @@ EventLoop* EventLoopThread::startLoop()
         MutexLockGuard lock(mutex_);
         while(loop_ == NULL)
         {
-            cond_wait();
+            cond_.wait();
         }
     }
     return loop_;

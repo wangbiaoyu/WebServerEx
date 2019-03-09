@@ -69,7 +69,7 @@ void TimerManager::handleExpiredEvent()
 	if(ptimer_now->isDeleted())
 	    timerNodeQueue.pop();
 	else if(ptimer_now->isValid() == false)
-	    timerNodeQueue.pop;
+	    timerNodeQueue.pop();
 	else
 	    break;
     }

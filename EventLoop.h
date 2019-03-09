@@ -29,7 +29,7 @@ public:
         assert(isInLoopThread());
     }
 
-    void shutdown(Shared_ptr<Channel> channel)
+    void shutdown(shared_ptr<Channel> channel)
     {
         shutDownWR(channel->getFd());
     }
@@ -57,7 +57,7 @@ private:
     bool eventHandling_;
     mutable MutexLock mutex_;
     std::vector<Functor> pendingFunctors_;
-    bool callingPendingFUnctors_;
+    bool callingPendingFunctors_;
     const pid_t threadId_;
     shared_ptr<Channel> pwakeupChannel_;
 
@@ -65,6 +65,6 @@ private:
     void handleRead();
     void doPendingFunctors();
     void handleConn();
-}
+};
 
 

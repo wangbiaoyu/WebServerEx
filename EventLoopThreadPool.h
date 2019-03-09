@@ -1,4 +1,3 @@
-
 #pragma once
 #include "base/noncopyable.h"
 #include "EventLoopThread.h"
@@ -9,12 +8,14 @@
 class EventLoopThreadPool : noncopyable
 {
 public:
-    EventLoopThreadPool(EventLoop* baseLoop,int threadNum);
+    EventLoopThreadPool(EventLoop* baseLoop, int numThreads);
+
     ~EventLoopThreadPool()
     {
         LOG << "~EventLoopThreadPool()";
     }
     void start();
+
     EventLoop *getNextLoop();
 
 private:

@@ -1,4 +1,3 @@
-
 #pragma once
 #include "Timer.h"
 #include <string>
@@ -21,7 +20,6 @@ enum ProcessState
     STATE_ANALYSIS,
     STATE_FINISH
 };
-
 
 enum URIState
 {
@@ -76,42 +74,48 @@ enum HttpVersion
     HTTP_11
 };
 
-class MImeType
+class MimeType
 {
 private:
     static void init();
-    static std::unordred_map<std::string,std::string> mime;
+    static std::unordered_map<std::string, std::string> mime;
     MimeType();
     MimeType(const MimeType &m);
+
 public:
     static std::string getMime(const std::string &suffix);
+
 private:
     static pthread_once_t once_control;
 };
 
-class HttpData:public std::enable_shared_from_this<HttpData>
+
+class HttpData: public std::enable_shared_from_this<HttpData>
 {
 public:
-    HttpData(EventLoop *loop,int connfd);
-    ~HttpData() {close(fd_);}
+    HttpData(EventLoop *loop, int connfd);
+    ~HttpData() { close(fd_); }
     void reset();
     void seperateTimer();
     void linkTimer(std::shared_ptr<TimerNode> mtimer)
     {
-	timer_ = mtimer;
+        // shared_ptr重载了bool, 但weak_ptr没有
+        timer_ = mtimer; 
     }
-    std::shared_ptr<Channel> getChannel() {return channel_;}
-    EventLoop *getLoop() {return loop_;}
+    std::shared_ptr<Channel> getChannel() { return channel_; }
+    EventLoop *getLoop() { return loop_; }
     void handleClose();
     void newEvent();
+
 private:
     EventLoop *loop_;
-    int fd_;
     std::shared_ptr<Channel> channel_;
+    int fd_;
     std::string inBuffer_;
     std::string outBuffer_;
     bool error_;
     ConnectionState connectionState_;
+
     HttpMethod method_;
     HttpVersion HTTPVersion_;
     std::string fileName_;
@@ -120,13 +124,13 @@ private:
     ProcessState state_;
     ParseState hState_;
     bool keepAlive_;
-    std::map<std::string,std::string> headers_;
+    std::map<std::string, std::string> headers_;
     std::weak_ptr<TimerNode> timer_;
-    
+
     void handleRead();
     void handleWrite();
     void handleConn();
-    void handleError(int fdf, int err_num,std::string short_msg);
+    void handleError(int fd, int err_num, std::string short_msg);
     URIState parseURI();
     HeaderState parseHeaders();
     AnalysisState analysisRequest();

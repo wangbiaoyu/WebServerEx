@@ -1,4 +1,3 @@
-
 #include "EventLoop.h"
 #include "base/Logging.h"
 #include "Util.h"
@@ -24,7 +23,7 @@ int createEventfd()
 EventLoop::EventLoop()
 :   looping_(false),
     poller_(new Epoll()),
-    wakeupFd_(creatEventfd()),
+    wakeupFd_(createEventfd()),
     quit_(false),
     eventHandling_(false),
     callingPendingFunctors_(false),
@@ -100,7 +99,7 @@ void EventLoop::loop()
         {
             it->handleEvents();
         }
-        evnetHandling_ = false;
+        eventHandling_ = false;
         doPendingFunctors();
         poller_->handleExpired();
     }
@@ -129,4 +128,13 @@ void EventLoop::quit()
         wakeup();
     }
 
+}
+
+void EventLoop::handleRead()
+{
+    uint64_t one = 1;
+    ssize_t n = readn(wakeupFd_,&one,sizeof one);
+    if(n != sizeof one)
+        LOG << "EventLoop wakeup Read Faild!";
+    pwakeupChannel_->setEvents(EPOLLIN | EPOLLET);
 }
