@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/llfi/WebServerEx/c++_test/vector.cpp
+iostream
+-
+vector
+-
+stdio.h
+-
+memory.h
+-
+algorithm
+-
+
