@@ -38,7 +38,6 @@ void Server::start()
 
 void Server::handNewConn()
 {
-    cout << "ServerConn"<<endl;
     struct sockaddr_in client_addr;
     memset(&client_addr, 0, sizeof(struct sockaddr_in));
     socklen_t client_addr_len = sizeof(client_addr);
@@ -47,7 +46,7 @@ void Server::handNewConn()
     {
         EventLoop *loop = eventLoopThreadPool_->getNextLoop();
         LOG << "New connection from " << inet_ntoa(client_addr.sin_addr) << ":" << ntohs(client_addr.sin_port);
-        cout << "new connection" << endl;
+        // cout << "new connection" << endl;
         // cout << inet_ntoa(client_addr.sin_addr) << endl;
         // cout << ntohs(client_addr.sin_port) << endl;
         /*

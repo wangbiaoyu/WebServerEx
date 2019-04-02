@@ -15,7 +15,7 @@ std::unordered_map<std::string, std::string> MimeType::mime;
 
 const __uint32_t DEFAULT_EVENT = EPOLLIN | EPOLLET | EPOLLONESHOT;
 const int DEFAULT_EXPIRED_TIME = 2000; // ms
-const int DEFAULT_KEEP_ALIVE_TIME = 1000; // ms
+const int DEFAULT_KEEP_ALIVE_TIME = 5 * 60 * 1000; // ms
 
 char favicon[555] = {
   '\x89', 'P', 'N', 'G', '\xD', '\xA', '\x1A', '\xA',
@@ -173,7 +173,6 @@ void HttpData::handleRead()
     {
         bool zero = false;
         int read_num = readn(fd_, inBuffer_, zero);
-	cout << "Request: "<< inBuffer_ <<endl;
         LOG << "Request: " << inBuffer_;
         if (connectionState_ == H_DISCONNECTING)
         {
@@ -321,7 +320,6 @@ void HttpData::handleWrite()
             events_ = 0;
             error_ = true;
         }
-	LOG << "outBuffer_"<<outBuffer_;
         if (outBuffer_.size() > 0)
             events_ |= EPOLLOUT;
     }
@@ -635,11 +633,8 @@ AnalysisState HttpData::analysisRequest()
         // echo test
         if (fileName_ == "hello")
         {
-	    outBuffer_ = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
-	    //Hello World";
-	   // outBuffer_ += header;
-	    outBuffer_ += "<html><head><title>233</title></head><body>666</body></html>";	
-	    return ANALYSIS_SUCCESS;
+            outBuffer_ = "HTTP/1.1 200 OK\r\nContent-type: text/plain\r\n\r\nHello World";
+            return ANALYSIS_SUCCESS;
         }
         if (fileName_ == "favicon.ico")
         {
@@ -705,7 +700,7 @@ void HttpData::handleError(int fd, int err_num, string short_msg)
     body_buff += "<hr><em> LinYa's Web Server</em>\n</body></html>";
 
     header_buff += "HTTP/1.1 " + to_string(err_num) + short_msg + "\r\n";
-    header_buff += "Content-Type: text/html;charset=UTF-8\r\n";
+    header_buff += "Content-Type: text/html\r\n";
     header_buff += "Connection: Close\r\n";
     header_buff += "Content-Length: " + to_string(body_buff.size()) + "\r\n";
     header_buff += "Server: LinYa's Web Server\r\n";;

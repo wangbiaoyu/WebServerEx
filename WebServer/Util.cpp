@@ -197,9 +197,7 @@ int setSocketNonBlocking(int fd)
         return -1;
 
     flag |= O_NONBLOCK;
-    if(fcntl(fd, F_SETFL, flag) == -1)
-        return -1;
-    return 0;
+    return fcntl(fd, F_SETFL, flag);
 }
 
 void setSocketNodelay(int fd) 

@@ -1,5 +1,4 @@
 #pragma once
-#include "Timer.h"
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -7,7 +6,6 @@
 #include <functional>
 #include <sys/epoll.h>
 
-using namespace std;
 
 class EventLoop;
 class HttpData;
@@ -72,7 +70,6 @@ public:
 
     void handleEvents()
     {
-    	printf("handleEvetns\n");
         events_ = 0;
         if ((revents_ & EPOLLHUP) && !(revents_ & EPOLLIN))
         {

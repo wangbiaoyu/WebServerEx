@@ -1,4 +1,3 @@
-
 #include "LogStream.h"
 #include <algorithm>
 #include <limits>

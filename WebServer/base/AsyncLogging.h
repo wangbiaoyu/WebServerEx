@@ -1,4 +1,3 @@
-
 #pragma once
 #include "CountDownLatch.h"
 #include "MutexLock.h"
@@ -12,26 +11,28 @@
 class AsyncLogging : noncopyable
 {
 public:
-    AsyncLogging(const std::string basename,int flushInterval = 2);
+    AsyncLogging(const std::string basename, int flushInterval = 2);
     ~AsyncLogging()
     {
-	if(running_)
-	    stop();
+        if (running_)
+            stop();
     }
-    void append(const char *logline,int len);
-    
+    void append(const char* logline, int len);
+
     void start()
     {
-	running_ = true;
-	thread_.start();
-	latch_.wait();
+        running_ = true;
+        thread_.start();
+        latch_.wait();
     }
+
     void stop()
     {
-	running_ = false;
-	cond_.notify();
-	thread_.join();
+        running_ = false;
+        cond_.notify();
+        thread_.join();
     }
+
 
 private:
     void threadFunc();
@@ -44,9 +45,8 @@ private:
     Thread thread_;
     MutexLock mutex_;
     Condition cond_;
-    BufferPtr currentBUffer_;
+    BufferPtr currentBuffer_;
     BufferPtr nextBuffer_;
     BufferVector buffers_;
     CountDownLatch latch_;
 };
-

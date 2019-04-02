@@ -1,5 +1,3 @@
-#pragma once
-#include "base/noncopyable.h"
 #include "EventLoopThread.h"
 #include "base/Logging.h"
 #include <memory>

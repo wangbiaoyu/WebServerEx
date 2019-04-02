@@ -1,8 +1,8 @@
-
 #pragma once
+
 class noncopyable
 {
-protected:  
+protected:
     noncopyable() {}
     ~noncopyable() {}
 private:

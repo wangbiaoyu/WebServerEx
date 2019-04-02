@@ -1,4 +1,4 @@
-
+//#include "Server.h"
 #include "EventLoop.h"
 #include "Server.h"
 #include "base/Logging.h"
@@ -10,7 +10,8 @@ int main(int argc,char *argv[]){
 	std::string logPath = "./WebServer.log";
 	Logger::setLogFileName(logPath); 
 	EventLoop mainLoop;
-	Server HttpServer(&mainLoop,threadNum,port);
+	Server* HttpServer = new Server(&mainLoop,threadNum,port);
 	HttpServer->start();
     mainLoop.loop();
+    return 0;
 }

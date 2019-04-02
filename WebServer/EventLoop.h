@@ -1,6 +1,4 @@
-
 #pragma once
-#include "base/Thread.h"
 #include "Epoll.h"
 #include "base/Logging.h"
 #include "Channel.h"
@@ -13,6 +11,7 @@
 #include <iostream>
 using namespace std;
 
+
 class EventLoop
 {
 public:
@@ -23,33 +22,31 @@ public:
     void quit();
     void runInLoop(Functor&& cb);
     void queueInLoop(Functor&& cb);
-    bool isInLoopThread() const {return threadId_ == CurrentThread::tid();}
+    bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
     void assertInLoopThread()
     {
         assert(isInLoopThread());
     }
-
     void shutdown(shared_ptr<Channel> channel)
     {
         shutDownWR(channel->getFd());
     }
-
     void removeFromPoller(shared_ptr<Channel> channel)
     {
+        //shutDownWR(channel->getFd());
         poller_->epoll_del(channel);
     }
-
-    void updatePoller(shared_ptr<Channel> channel,int timeout = 0)
+    void updatePoller(shared_ptr<Channel> channel, int timeout = 0)
     {
-        poller_->epoll_mod(channel,timeout);
+        poller_->epoll_mod(channel, timeout);
     }
-
-    void addToPoller(shared_ptr<Channel> channel,int timeout = 0)
+    void addToPoller(shared_ptr<Channel> channel, int timeout = 0)
     {
-        poller_->epoll_add(channel,timeout);
+        poller_->epoll_add(channel, timeout);
     }
-
+    
 private:
+    // 声明顺序 wakeupFd_ > pwakeupChannel_
     bool looping_;
     shared_ptr<Epoll> poller_;
     int wakeupFd_;
@@ -58,13 +55,11 @@ private:
     mutable MutexLock mutex_;
     std::vector<Functor> pendingFunctors_;
     bool callingPendingFunctors_;
-    const pid_t threadId_;
+    const pid_t threadId_; 
     shared_ptr<Channel> pwakeupChannel_;
-
+    
     void wakeup();
     void handleRead();
     void doPendingFunctors();
     void handleConn();
 };
-
-

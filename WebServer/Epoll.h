@@ -1,7 +1,7 @@
 #pragma once
-#include "Channel.h"
 #include "HttpData.h"
 #include "Timer.h"
+#include "Channel.h"
 #include <vector>
 #include <unordered_map>
 #include <sys/epoll.h>
