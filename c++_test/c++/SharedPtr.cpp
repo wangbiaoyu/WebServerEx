@@ -61,13 +61,13 @@ SharedPtr<T>::~SharedPtr()
 }
 
 template<class T>
-T &SharedPtr<T>::operator*()
+T SharedPtr<T>::operator&()
 {
     if(obj_)
     {
-        return (T*)obj_;     
+        return *obj_;     
     }
-    return (T*)0;
+    return NULL;
 }
 int main()
 {
