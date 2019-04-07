@@ -6,8 +6,8 @@
 
 int main(int argc,char *argv[]){
 	int threadNum = 4;
-	int port = 8080;
-	std::string logPath = "./WebServer.log";
+	int port = 80;
+	std::string logPath = "WebServer.log";
 	Logger::setLogFileName(logPath); 
 	EventLoop mainLoop;
 	Server* HttpServer = new Server(&mainLoop,threadNum,port);

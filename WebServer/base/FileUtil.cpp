@@ -9,9 +9,11 @@
 using namespace std;
 
 AppendFile::AppendFile(string filename)
-:   fp_(fopen(filename.c_str(), "ae"))
+//:   fp_(fopen(filename.c_str(), "ae"))
 {
     // 用户提供缓冲区
+    perror(filename.c_str());
+    fp_ = fopen(filename.c_str(),"ae");
     setbuffer(fp_, buffer_, sizeof buffer_);
 }
 
