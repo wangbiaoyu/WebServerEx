@@ -24,6 +24,8 @@
 #include <strings.h>
 #include <time.h>
 #include <signal.h>
+#include <errno.h>
+
 
 /* values */
 volatile int timerexpired=0;
@@ -117,6 +119,7 @@ int main(int argc, char *argv[])
 
     while((opt=getopt_long(argc,argv,"912Vfrt:p:c:?h",long_options,&options_index))!=EOF )
     {
+        printf("opt = %c\n",opt);
         switch(opt)
         {
             case  0 : break;
@@ -146,7 +149,9 @@ int main(int argc, char *argv[])
                 return 2;
             }
             *tmp='\0';
-            proxyport=atoi(tmp+1);break;
+            proxyport=atoi(tmp+1);
+            printf("proxyport = %d",proxyport);
+            break;
             case ':':
             case 'h':
             case '?': usage();return 2;break;
@@ -439,7 +444,7 @@ void benchcore(const char *host,const int port,const char *req)
 {
     int rlen;
     char buf[1500];
-    int s,i;
+    int s,i = 0;
     struct sigaction sa;
 
     /* setup alarm signal handler */
@@ -466,29 +471,40 @@ void benchcore(const char *host,const int port,const char *req)
         s=Socket(host,port);                          
         if(s<0) { failed++;continue;} 
         if(rlen!=write(s,req,rlen)) {failed++;close(s);continue;}
-        if(http10==0) 
+        //if(http10==0) 
         if(shutdown(s,1)) { failed++;close(s);continue;}
         if(force==0) 
         {
             /* read all available data from socket */
             while(1)
             {
-                if(timerexpired) break; 
+                if(timerexpired) 
+                    if(s == 0){
+                        close(s);
+                        break; 
+                    }
                 i=read(s,buf,1500);
+               // printf("read i = %d\n",i);
                 /* fprintf(stderr,"%d\n",i); */
-                if(i<0) 
+                
+                if(i < 0) 
                 { 
+                    printf("i == eintr\n");
                     failed++;
                     close(s);
+                   // break;
                     goto nexttry;
                 }
+                else if(i == 0) break;
                 else
-                if(i==0) break;
-                else
-                bytes+=i;
+                    bytes+=i;
             }
+            printf("buf is %s , byte is : %d\n",buf,bytes);
         }
-        if(close(s)) {failed++;continue;}
+        int cl = close(s);
+        printf("%d\n",cl);
+        if(cl) {failed++;break;}
         speed++;
+        printf("speed = %d\n",speed);
     }
 }
