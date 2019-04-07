@@ -5,7 +5,7 @@
 #include <string>
 
 int main(int argc,char *argv[]){
-	int threadNum = 4;
+	int threadNum = 2;
 	int port = 80;
 	std::string logPath = "WebServer.log";
 	Logger::setLogFileName(logPath); 

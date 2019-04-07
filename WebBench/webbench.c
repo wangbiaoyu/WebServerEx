@@ -488,7 +488,7 @@ void benchcore(const char *host,const int port,const char *req)
                 /* fprintf(stderr,"%d\n",i); */
                 
                 if(i < 0) 
-                { 
+            { 
                     printf("i == eintr\n");
                     failed++;
                     close(s);
@@ -499,12 +499,12 @@ void benchcore(const char *host,const int port,const char *req)
                 else
                     bytes+=i;
             }
-            printf("buf is %s , byte is : %d\n",buf,bytes);
+            //printf("buf is %s , byte is : %d\n",buf,bytes);
         }
         int cl = close(s);
-        printf("%d\n",cl);
+        //printf("%d\n",cl);
         if(cl) {failed++;break;}
         speed++;
-        printf("speed = %d\n",speed);
+        //printf("speed = %d\n",speed);
     }
 }
