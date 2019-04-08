@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <string.h>
+#include <vector>
 using namespace std;
 
 template<class T>
@@ -16,7 +17,7 @@ SharedPtr<T>::SharedPtr(T* obj)
 :   obj_(obj),
     refCount_(new int(1))
 {
-    cout << "init shared_ptr" << *obj_ <<endl;
+    cout << "init shared_ptr" << endl;//*obj_ <<endl;
 }
 
 template <class T>
@@ -56,8 +57,9 @@ SharedPtr<T>::~SharedPtr()
         cout << "~SharedPtr"<<endl;
         delete obj_;
         delete refCount_;
-    }else
-        cout << "233" <<endl;
+    }//else
+       // cout << "233" <<endl;
+    cout << "refCount_: "<< *refCount_ << endl;
 }
 
 template<class T>
@@ -69,13 +71,37 @@ T SharedPtr<T>::operator&()
     }
     return NULL;
 }
+
+class Derive;
+
+class Base
+{
+public:
+    void t1() { cout << "I am Base\n"; }  
+
+    vector<SharedPtr<Derive> > b;
+};
+
+class Derive
+{
+public:
+    void t1() {cout << "I am Derive\n"; }
+
+    SharedPtr<Base> d;
+};
+
 int main()
 {
-    //D d(1); 
-    SharedPtr<string> a(new string("23"));
-    SharedPtr<string> b;
-    SharedPtr<string> c(a);
-    shared_ptr<int> c1;
-    b = a;
+    //SharedPtr<string> a(new string("23"));
+    //SharedPtr<string> b;
+    //SharedPtr<string> c(a);
+    //shared_ptr<int> c1;
+    //b = a;
+    SharedPtr<Base> base(new Base());
+    SharedPtr<Derive> derive(new Derive());
+    base.getObj()->b.push_back(derive);
+    derive.getObj()->d = base;
+    cout <<  base.getrefCount() << " "<< derive.getrefCount() <<endl;
+    //base.b.push_back(derive);
     return 0;
 }

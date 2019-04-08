@@ -18,5 +18,5 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 #add_subdirectory()
 
-add_executable(run vector.cpp)
+add_executable(run SharedPtr.cpp)
 

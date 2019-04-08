@@ -11,7 +11,9 @@ public:
     SharedPtr(const SharedPtr& other);
     SharedPtr& operator=(const SharedPtr& obj);
     ~SharedPtr();
-    T &operator*();
+    T operator&();
+    T* getObj() { return obj_; }
+    int getrefCount() { return *refCount_; }
 private:
     T* obj_;
     int* refCount_;

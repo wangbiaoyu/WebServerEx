@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/llfi/WebServerEx/c++_test/c++/SharedPtr.cpp
+SharedPtr.h
+/home/llfi/WebServerEx/c++_test/c++/SharedPtr.h
+iostream
+-
+memory
+-
+string
+-
+string.h
+-
+vector
+-
+
+/home/llfi/WebServerEx/c++_test/c++/SharedPtr.h
+
