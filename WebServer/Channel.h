@@ -70,27 +70,25 @@ public:
 
     void handleEvents()
     {
-        events_ = 0;
         if ((revents_ & EPOLLHUP) && !(revents_ & EPOLLIN))
         {
             events_ = 0;
-            return;
         }
-        if (revents_ & EPOLLERR)
+        else if (revents_ & EPOLLERR)
         {
             if (errorHandler_) errorHandler_();
             events_ = 0;
-            return;
         }
-        if (revents_ & (EPOLLIN | EPOLLPRI | EPOLLRDHUP))
+        else if (revents_ & (EPOLLIN | EPOLLPRI | EPOLLRDHUP))
         {
             handleRead();
         }
-        if (revents_ & EPOLLOUT)
+        else if (revents_ & EPOLLOUT)
         {
             handleWrite();
-        }
-        handleConn();
+        }else{
+        	handleConn();
+		}
     }
     void handleRead();
     void handleWrite();

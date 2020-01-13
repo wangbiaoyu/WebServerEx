@@ -6,7 +6,7 @@
 
 int main(int argc,char *argv[]){
 	int threadNum = 2;
-	int port = 80;
+	int port = 8888;
 	std::string logPath = "WebServer.log";
 	Logger::setLogFileName(logPath); 
 	EventLoop mainLoop;

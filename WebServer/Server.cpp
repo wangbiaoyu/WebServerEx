@@ -28,7 +28,6 @@ Server::Server(EventLoop *loop, int threadNum, int port)
 void Server::start()
 {
     eventLoopThreadPool_->start();
-    //acceptChannel_->setEvents(EPOLLIN | EPOLLET | EPOLLONESHOT);
     acceptChannel_->setEvents(EPOLLIN | EPOLLET);
     acceptChannel_->setReadHandler(bind(&Server::handNewConn, this));
     acceptChannel_->setConnHandler(bind(&Server::handThisConn, this));
@@ -46,16 +45,6 @@ void Server::handNewConn()
     {
         EventLoop *loop = eventLoopThreadPool_->getNextLoop();
         LOG << "New connection from " << inet_ntoa(client_addr.sin_addr) << ":" << ntohs(client_addr.sin_port);
-        // cout << "new connection" << endl;
-        // cout << inet_ntoa(client_addr.sin_addr) << endl;
-        // cout << ntohs(client_addr.sin_port) << endl;
-        /*
-        // TCP的保活机制默认是关闭的
-        int optval = 0;
-        socklen_t len_optval = 4;
-        getsockopt(accept_fd, SOL_SOCKET,  SO_KEEPALIVE, &optval, &len_optval);
-        cout << "optval ==" << optval << endl;
-        */
         // 限制服务器的最大并发连接数
         if (accept_fd >= MAXFDS)
         {
@@ -76,6 +65,7 @@ void Server::handNewConn()
         shared_ptr<HttpData> req_info(new HttpData(loop, accept_fd));
         req_info->getChannel()->setHolder(req_info);
         loop->queueInLoop(std::bind(&HttpData::newEvent, req_info));
+		break;
     }
     acceptChannel_->setEvents(EPOLLIN | EPOLLET);
 }
