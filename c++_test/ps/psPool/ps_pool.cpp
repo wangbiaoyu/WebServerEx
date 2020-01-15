@@ -67,9 +67,12 @@ namespace ps_pool
 							continue;
 						}
 						//Transefer clientfd to child ps
-						
+						const ps_info* cur = round_robin();
+						if(::write(ps->info[0],&clientfd,sizeof(clientfd)) != sizeof(clientfd)){
+							std::cout << "IPC with child fail." << endl;
+						}		
 					}else{
-						
+						if(rev[i].events & )				
 					}
 				}	
 			}
@@ -78,5 +81,9 @@ namespace ps_pool
 
 	void ps_pool::bind_task(){
 		
+	}
+
+	const ps_info* ps_pool::round_robin(){
+		return ps_pool[ind_%size_];	
 	}
 }

@@ -18,6 +18,7 @@ public:
 	pid_t get_pid();
 	bool add_task();
 	void bind_task();
+	void init();
 protected:
 	struct ps_info{
 		pid_t sub_pid;
@@ -30,6 +31,7 @@ protected:
 	};	
 private:
 	void init_pool();
+	ps_info* robin();
 private:
 	vector<ps_info> pool_;
 	int sockfd_;
@@ -38,6 +40,7 @@ private:
 	bool running_;
 	bool stop_;
 	int epollfd_;
+	int ind_;
 };
 
 }
