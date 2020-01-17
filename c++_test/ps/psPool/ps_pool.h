@@ -2,38 +2,37 @@
 
 #include <vector>
 #include <unistd.h>
+#include <stdint.h>
 
-namespace ps_pool
+using namespace std;
+namespace psPool
 {
 
-
-class ps_pool
+struct ps_info{
+	pid_t sub_pid;
+	int pair[2];
+	ps_info(){ sub_pid = -1, pair[0] = -1,pair[1] = -1;}
+};
+class ps_pool //: public ISingleton<ps_pool>
 {
 
 public:
-	explicit ps_pool(uint32_t size);
-	ps_pool& (const ps_pool&) = delete;
+	explicit ps_pool(int ,uint32_t size);
+	ps_pool (const ps_pool&) = delete;
 	ps_pool& operator=(const ps_pool&) = delete;
 	~ps_pool();
-	pid_t get_pid();
-	bool add_task();
-	void bind_task();
+	//pid_t get_pid();
+	//bool add_task();
+	void run();
+	void bind_task(ps_info*);
 	void init();
-protected:
-	struct ps_info{
-		pid_t sub_pid;
-		int pair[2];
-		ps_info(){
-			sub_pid = -1;
-			pair[0] = -1;
-			pair[1] = -1;
-		}
-	};	
+
 private:
 	void init_pool();
-	ps_info* robin();
+	ps_info* round_robin();
+	void master_manager();
 private:
-	vector<ps_info> pool_;
+	vector<ps_info*> pool_;
 	int sockfd_;
 	uint32_t max_size_;	
 	uint32_t size_;
